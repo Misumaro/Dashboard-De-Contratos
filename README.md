@@ -100,6 +100,7 @@ O sistema aceita arquivos `.csv` ou `.txt` contendo, no mínimo, colunas semelha
 * Status de Treinamento
 
 > O sistema identifica automaticamente o separador (`;` ou `,`) e ignora linhas inválidas.
+
 > PLanilha de teste justo ao arquivo.
 ---
 
