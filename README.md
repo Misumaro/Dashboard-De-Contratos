@@ -14,9 +14,7 @@ Sistema web para **controle e visualização de contratos, projetos, colaborador
 ## 🚀 Demonstração
 
 🔗 **GitHub Pages:**
-[https://seu-usuario.github.io/dashboard-contratos/](https://seu-usuario.github.io/dashboard-contratos/)
-
-*(Ative o GitHub Pages nas configurações do repositório)*
+https://misumaro.github.io/Dashboard-De-Contratos/
 
 ---
 
