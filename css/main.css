@@ -1,0 +1,41 @@
+/* Estilos Globais e Personalizações */
+body { 
+    font-family: 'Inter', sans-serif; 
+    background-color: #f7fafc; 
+    background-image: radial-gradient(circle at top right, #e0e7ff, transparent 40%);
+    transition: background-color .3s ease;
+    overflow-x: hidden;
+}
+.dark body { 
+    background-color: #1a202c; 
+    background-image: radial-gradient(circle at top right, #2c3e50, transparent 50%);
+}
+
+/* Scrollbar Personalizada */
+::-webkit-scrollbar { width: 6px; height: 6px; } 
+::-webkit-scrollbar-track { background: #e2e8f0; }
+.dark ::-webkit-scrollbar-track { background: #2d3748; }
+::-webkit-scrollbar-thumb { background: #a0aec0; border-radius: 10px; }
+.dark ::-webkit-scrollbar-thumb { background: #4a5568; }
+
+/* Utilitários */
+[data-lucide] { width: 1em; height: 1em; }
+.fade-in { animation: fadeIn .5s ease-in-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+#theme-toggle-light-icon, .dark #theme-toggle-dark-icon { display: none; }
+.dark #theme-toggle-light-icon { display: inline-block; }
+
+.modal-input { padding: .625rem .75rem; border: 1px solid #cbd5e0; border-radius: .5rem; background: #fff; color: #2d3748; transition: box-shadow .15s, border-color .15s; }
+.dark .modal-input { background: #2d3748; border-color: #4a5568; color: #e2e8f0; }
+.modal-input:focus { outline: none; border-color: #4299e1; box-shadow: 0 0 0 2px #4299e1; }
+
+.card-hover { transition: transform 0.2s ease-out, box-shadow 0.2s ease-out; }
+.card-hover:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+.dark .card-hover:hover { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1); }
+
+.truncate-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Ajuste para tabela no modal não quebrar layout */
+.custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 4px; }
+.dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #4a5568; }

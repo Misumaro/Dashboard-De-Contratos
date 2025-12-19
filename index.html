@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>Dashboard de Contratos - Visão Real</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class' };
+    </script>
+
+    <script>
+        (function () {
+            try {
+                const saved = localStorage.getItem('theme');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if ((saved === 'dark') || (!saved && prefersDark)) {
+                    document.documentElement.classList.add('dark');
+                }
+            } catch (_) {}
+        })();
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@0.474.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+
+    <!-- Link para o CSS separado -->
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+    
+    <div class="flex h-screen flex-col overflow-hidden">
+        <div id="main-content" class="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto w-full">
+            
+            <header class="flex flex-col xl:flex-row justify-between items-center mb-8 gap-6 xl:gap-0">
+                <div class="w-full xl:w-auto text-center xl:text-left mb-4 xl:mb-0">
+                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">DASHBOARD GERAL</h1>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">CONTROLE DE CONTRATOS, PROJETOS E TREINAMENTOS</p>
+                    <p id="currentDateDisplay" class="text-xs font-medium text-blue-600 dark:text-blue-400 mt-2 uppercase"></p>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center gap-3 w-full xl:w-auto justify-end">
+                    <button id="clear-data-btn" title="Limpar Tudo (Resetar Dados)" type="button" class="hidden p-2.5 rounded-lg text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 border border-red-200 dark:border-red-800/50 bg-white dark:bg-gray-800 shadow-sm transition-colors flex-shrink-0">
+                        <i data-lucide="trash-2" class="w-5 h-5"></i>
+                    </button>
+
+                    <div class="relative w-full sm:w-64">
+                        <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
+                        <input id="searchInput" type="text" placeholder="Buscar..." class="pl-9 pr-4 py-2.5 border rounded-lg w-full bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm shadow-sm transition-shadow" aria-label="Caixa de pesquisa"/>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <input type="file" id="csvInput" accept=".csv, .txt" class="hidden">
+                        <button id="import-csv-btn" title="Importar Planilha CSV" type="button" class="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-green-600 hover:bg-green-700 text-white font-medium shadow-sm transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-green-500 dark:focus:ring-offset-gray-900">
+                            <i data-lucide="upload" class="w-4 h-4"></i>
+                            <span class="hidden xl:inline">Importar</span>
+                        </button>
+                        
+                        <button id="theme-toggle" title="Alternar Tema" type="button" class="p-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm transition-colors">
+                            <i data-lucide="moon" class="w-5 h-5 hidden dark:block"></i>
+                            <i data-lucide="sun" class="w-5 h-5 block dark:hidden"></i>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-8" aria-label="Resumo dos Contratos">
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex justify-between items-center card-hover relative overflow-hidden group">
+                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-blue-600"></div>
+                    <div class="overflow-hidden z-10">
+                        <p class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider truncate">Colab. Total Geral</p>
+                        <p id="totalGeralAD" class="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white mt-1">0</p>
+                    </div>
+                    <div class="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-full flex-shrink-0 group-hover:scale-110 transition-transform">
+                        <i data-lucide="users" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex justify-between items-center card-hover relative overflow-hidden group">
+                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-green-500"></div>
+                    <div class="overflow-hidden z-10">
+                        <p class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider truncate">Colab. Ativos (A)</p>
+                        <p id="totalAtivos" class="text-2xl sm:text-3xl font-bold text-green-600 dark:text-green-400 mt-1">0</p>
+                    </div>
+                    <div class="p-3 bg-green-50 dark:bg-green-900/20 rounded-full flex-shrink-0 group-hover:scale-110 transition-transform">
+                        <i data-lucide="user-check" class="w-6 h-6 text-green-600 dark:text-green-400"></i>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex justify-between items-center card-hover relative overflow-hidden group">
+                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-red-500"></div>
+                    <div class="overflow-hidden z-10">
+                        <p class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider truncate">Colab. Inativos (D)</p>
+                        <p id="totalInativos" class="text-2xl sm:text-3xl font-bold text-red-600 dark:text-red-400 mt-1">0</p>
+                    </div>
+                    <div class="p-3 bg-red-50 dark:bg-red-900/20 rounded-full flex-shrink-0 group-hover:scale-110 transition-transform">
+                        <i data-lucide="user-x" class="w-6 h-6 text-red-600 dark:text-red-400"></i>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex justify-between items-center card-hover relative overflow-hidden group">
+                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-yellow-500"></div>
+                    <div class="overflow-hidden z-10">
+                        <p class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider truncate">Treino Pendente</p>
+                        <p id="totalPendentes" class="text-2xl sm:text-3xl font-bold text-yellow-600 dark:text-yellow-400 mt-1">0</p>
+                    </div>
+                    <div class="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-full flex-shrink-0 group-hover:scale-110 transition-transform">
+                        <i data-lucide="alert-triangle" class="w-6 h-6 text-yellow-600 dark:text-yellow-400"></i>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex justify-between items-center card-hover relative overflow-hidden group">
+                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-teal-500"></div>
+                    <div class="overflow-hidden z-10">
+                        <p class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider truncate">Treino Realizado</p>
+                        <p id="totalRealizados" class="text-2xl sm:text-3xl font-bold text-teal-600 dark:text-teal-400 mt-1">0</p>
+                    </div>
+                    <div class="p-3 bg-teal-50 dark:bg-teal-900/20 rounded-full flex-shrink-0 group-hover:scale-110 transition-transform">
+                        <i data-lucide="check-circle-2" class="w-6 h-6 text-teal-600 dark:text-teal-400"></i>
+                    </div>
+                </div>
+            </section>
+
+            <section class="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
+                <div class="w-full sm:w-auto text-center sm:text-left">
+                    <p id="contractCount" class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase"></p>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                    <div class="relative w-full sm:w-48">
+                        <i data-lucide="folder-search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"></i>
+                        <select id="filterCoordenador" class="appearance-none bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg pl-9 pr-8 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-full transition-colors cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600">
+                            <option value="">Filtrar Projeto</option>
+                        </select>
+                        <i data-lucide="chevron-down" class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"></i>
+                    </div>
+                    <div class="relative w-full sm:w-48">
+                        <i data-lucide="building" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"></i>
+                        <select id="filterContratoStatus" class="appearance-none bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg pl-9 pr-8 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-full transition-colors cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600">
+                            <option value="">Filtrar Empresa</option>
+                        </select>
+                        <i data-lucide="chevron-down" class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"></i>
+                    </div>
+                    <button id="clearFiltersBtn" class="text-sm text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 font-medium px-4 py-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors flex items-center justify-center gap-2">
+                        <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Limpar
+                    </button>
+                </div>
+            </section>
+
+            <main class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div id="contractsGrid" class="lg:col-span-2 grid grid-cols-1 md:grid-cols-1 xl:grid-cols-2 gap-6 self-start content-start"></div>
+                
+                <aside class="lg:col-span-1 space-y-6">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-100 dark:border-gray-700">
+                        <h3 class="font-bold text-lg dark:text-white mb-6 text-center flex items-center justify-center gap-2">
+                            <i data-lucide="pie-chart" class="w-5 h-5 text-gray-400"></i> Status de Treinamento (Ativos)
+                        </h3>
+                        <div class="w-full max-w-xs mx-auto relative">
+                            <canvas id="machineStatusChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-100 dark:border-gray-700">
+                        <h3 class="font-bold text-lg dark:text-white mb-6 text-center flex items-center justify-center gap-2">
+                            <i data-lucide="bar-chart-3" class="w-5 h-5 text-gray-400"></i> Volume por Projeto
+                        </h3>
+                        <div class="w-full mx-auto h-64">
+                            <canvas id="contractStatusChart"></canvas>
+                        </div>
+                    </div>
+                </aside>
+            </main>
+        </div>
+    </div>
+    
+    <div id="project-details-modal" class="fixed inset-0 bg-black/60 hidden z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-6 w-full max-w-[95%] xl:max-w-7xl max-h-[90vh] flex flex-col transform transition-all">
+            <div class="flex justify-between items-center mb-6 flex-shrink-0 border-b border-gray-100 dark:border-gray-700 pb-4">
+                <div>
+                    <h3 id="project-modal-title" class="text-2xl font-bold dark:text-white truncate pr-4">Detalhes do Projeto</h3>
+                    <p id="project-modal-subtitle" class="text-sm text-gray-500 dark:text-gray-400 truncate mt-1">Listagem de colaboradores</p>
+                </div>
+                <button id="close-project-modal-btn" class="text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="flex-grow overflow-x-auto custom-scrollbar">
+                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 min-w-[800px]">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700/50 dark:text-gray-400 sticky top-0">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 rounded-tl-lg">Colaborador</th>
+                            <th scope="col" class="px-6 py-3">Função</th>
+                            <th scope="col" class="px-6 py-3">Situação</th>
+                            <th scope="col" class="px-6 py-3 rounded-tr-lg">Treinamento</th>
+                        </tr>
+                    </thead>
+                    <tbody id="project-employees-list" class="divide-y divide-gray-100 dark:divide-gray-700"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div id="training-details-modal" class="fixed inset-0 bg-black/60 hidden z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-6 w-full max-w-[95%] xl:max-w-7xl max-h-[90vh] flex flex-col transform transition-all">
+            <div class="flex justify-between items-center mb-6 flex-shrink-0 border-b border-gray-100 dark:border-gray-700 pb-4">
+                <div>
+                    <h3 id="training-modal-title" class="text-2xl font-bold dark:text-white truncate pr-4">Detalhamento de Treinamento (Ativos)</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 truncate mt-1">Lista de colaboradores ativos e seus status</p>
+                </div>
+                <button id="close-training-modal-btn" class="text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            
+            <div class="flex gap-2 mb-4 flex-wrap">
+                 <button id="btn-filter-all" class="px-4 py-2 text-sm rounded-lg font-medium transition-all shadow-sm">Todos</button>
+                 <button id="btn-filter-realizado" class="px-4 py-2 text-sm rounded-lg font-medium transition-all shadow-sm">Realizados</button>
+                 <button id="btn-filter-pendente" class="px-4 py-2 text-sm rounded-lg font-medium transition-all shadow-sm">Pendentes</button>
+            </div>
+
+            <div class="flex-grow overflow-x-auto custom-scrollbar">
+                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 min-w-[800px]">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700/50 dark:text-gray-400 sticky top-0">
+                        <tr>
+                            <th class="px-6 py-3 rounded-tl-lg">Colaborador</th>
+                            <th class="px-6 py-3">Empresa</th>
+                            <th class="px-6 py-3">Projeto</th>
+                            <th class="px-6 py-3">Função</th>
+                            <th class="px-6 py-3 rounded-tr-lg">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="training-employees-list" class="divide-y divide-gray-100 dark:divide-gray-700"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script principal separado -->
+    <script src="js/app.js"></script>
+</body>
+</html>
