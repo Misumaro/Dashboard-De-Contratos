@@ -101,7 +101,7 @@ O sistema aceita arquivos `.csv` ou `.txt` contendo, no mínimo, colunas semelha
 
 > O sistema identifica automaticamente o separador (`;` ou `,`) e ignora linhas inválidas.
 
-> Planilha de teste justo ao arquivo.
+> Planilha de teste junto ao arquivo.
 ---
 
 ## 🔐 Armazenamento de Dados
