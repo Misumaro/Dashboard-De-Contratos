@@ -5,33 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <title>Dashboard de Contratos - Visão Real</title>
 
-    <!-- Tailwind CSS (CDN) -->
-    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = { darkMode: 'class' };
     </script>
 
-    <!-- Script Inline para evitar Flash de Tema Claro (Best Practice) -->
-    <script>
-        (function () {
-            try {
-                const saved = localStorage.getItem('theme');
-                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                if ((saved === 'dark') || (!saved && prefersDark)) {
-                    document.documentElement.classList.add('dark');
-                }
-            } catch (_) {}
-        })();
-    </script>
-
     <!-- Fontes e Bibliotecas -->
-    <link href="[https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap](https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap)" rel="stylesheet">
-    <script src="[https://unpkg.com/lucide@0.474.0](https://unpkg.com/lucide@0.474.0)"></script>
-    <script src="[https://cdn.jsdelivr.net/npm/chart.js@4.4.4](https://cdn.jsdelivr.net/npm/chart.js@4.4.4)"></script>
-    <script src="[https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js](https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js)"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@0.474.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 
-    <!-- Seu CSS Personalizado -->
-    <link rel="stylesheet" href="CSS/main.css">
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="css/main.css">
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
     
@@ -92,7 +79,7 @@
                 </div>
 
                 <!-- Card 2 -->
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex justify-between items-center card-hover relative overflow-hidden group cursor-pointer" onclick="openTrainingModal('ativos')">
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex justify-between items-center card-hover relative overflow-hidden group cursor-pointer" onclick="window.app.openTrainingModal('ativos')">
                     <div class="absolute left-0 top-0 bottom-0 w-1 bg-green-500"></div>
                     <div class="overflow-hidden z-10">
                         <p class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider truncate">Colab. Ativos (A)</p>
@@ -116,10 +103,10 @@
                 </div>
 
                 <!-- Card 4 -->
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex justify-between items-center card-hover relative overflow-hidden group cursor-pointer" onclick="openTrainingModal('pendente')">
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex justify-between items-center card-hover relative overflow-hidden group cursor-pointer" onclick="window.app.openTrainingModal('pendente')">
                     <div class="absolute left-0 top-0 bottom-0 w-1 bg-yellow-500"></div>
                     <div class="overflow-hidden z-10">
-                        <p class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider truncate">Treino Pendente</p>
+                        <p class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider truncate">Treino Não Realizado</p>
                         <p id="totalPendentes" class="text-2xl sm:text-3xl font-bold text-yellow-600 dark:text-yellow-400 mt-1">0</p>
                     </div>
                     <div class="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-full flex-shrink-0 group-hover:scale-110 transition-transform">
@@ -128,7 +115,7 @@
                 </div>
 
                 <!-- Card 5 -->
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex justify-between items-center card-hover relative overflow-hidden group cursor-pointer" onclick="openTrainingModal('realizado')">
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex justify-between items-center card-hover relative overflow-hidden group cursor-pointer" onclick="window.app.openTrainingModal('realizado')">
                     <div class="absolute left-0 top-0 bottom-0 w-1 bg-teal-500"></div>
                     <div class="overflow-hidden z-10">
                         <p class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider truncate">Treino Realizado</p>
@@ -141,11 +128,21 @@
             </section>
 
             <!-- FILTROS -->
-            <section class="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
-                <div class="w-full sm:w-auto text-center sm:text-left">
+            <section class="flex flex-col xl:flex-row items-center justify-between mb-6 gap-4 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
+                <div class="w-full xl:w-auto text-center xl:text-left">
                     <p id="contractCount" class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase"></p>
                 </div>
-                <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                <div class="flex flex-col sm:flex-row gap-3 w-full xl:w-auto">
+                    <!-- Filtro Ano -->
+                    <div class="relative w-full sm:w-36">
+                        <i data-lucide="calendar" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"></i>
+                        <select id="filterAno" class="appearance-none bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg pl-9 pr-8 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-full transition-colors cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600">
+                            <option value="">Todos Anos</option>
+                        </select>
+                        <i data-lucide="chevron-down" class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"></i>
+                    </div>
+
+                    <!-- Filtro Projeto -->
                     <div class="relative w-full sm:w-48">
                         <i data-lucide="folder-search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"></i>
                         <select id="filterCoordenador" class="appearance-none bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg pl-9 pr-8 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-full transition-colors cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600">
@@ -153,6 +150,8 @@
                         </select>
                         <i data-lucide="chevron-down" class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"></i>
                     </div>
+                    
+                    <!-- Filtro Empresa -->
                     <div class="relative w-full sm:w-48">
                         <i data-lucide="building" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"></i>
                         <select id="filterContratoStatus" class="appearance-none bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg pl-9 pr-8 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-full transition-colors cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600">
@@ -160,6 +159,7 @@
                         </select>
                         <i data-lucide="chevron-down" class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"></i>
                     </div>
+
                     <button id="clearFiltersBtn" class="text-sm text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 font-medium px-4 py-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors flex items-center justify-center gap-2">
                         <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Limpar
                     </button>
@@ -180,6 +180,16 @@
                         </h3>
                         <div class="w-full max-w-xs mx-auto relative">
                             <canvas id="machineStatusChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- NOVO GRÁFICO: Porcentagem por Ano -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-100 dark:border-gray-700">
+                        <h3 class="font-bold text-lg dark:text-white mb-6 text-center flex items-center justify-center gap-2">
+                            <i data-lucide="calendar-check-2" class="w-5 h-5 text-gray-400"></i> Aderência por Ano (%)
+                        </h3>
+                        <div class="w-full mx-auto h-64">
+                            <canvas id="yearComplianceChart"></canvas>
                         </div>
                     </div>
                     
@@ -237,6 +247,7 @@
                         <tr>
                             <th scope="col" class="px-6 py-3 rounded-tl-lg">Colaborador</th>
                             <th scope="col" class="px-6 py-3">Função</th>
+                            <th scope="col" class="px-6 py-3">Ano</th>
                             <th scope="col" class="px-6 py-3">Situação</th>
                             <th scope="col" class="px-6 py-3 rounded-tr-lg">Treinamento</th>
                         </tr>
@@ -261,9 +272,9 @@
             </div>
             
             <div class="flex gap-2 mb-4 flex-wrap">
-                 <button id="btn-filter-all" onclick="setTrainingFilter('all')" class="px-4 py-2 text-sm rounded-lg font-medium transition-all shadow-sm bg-blue-600 text-white">Todos</button>
-                 <button id="btn-filter-realizado" onclick="setTrainingFilter('realizado')" class="px-4 py-2 text-sm rounded-lg font-medium transition-all shadow-sm bg-gray-100 dark:bg-gray-700 dark:text-gray-300">Realizados</button>
-                 <button id="btn-filter-pendente" onclick="setTrainingFilter('pendente')" class="px-4 py-2 text-sm rounded-lg font-medium transition-all shadow-sm bg-gray-100 dark:bg-gray-700 dark:text-gray-300">Pendentes</button>
+                 <button id="btn-filter-all" class="px-4 py-2 text-sm rounded-lg font-medium transition-all shadow-sm bg-blue-600 text-white">Todos</button>
+                 <button id="btn-filter-realizado" class="px-4 py-2 text-sm rounded-lg font-medium transition-all shadow-sm bg-gray-100 dark:bg-gray-700 dark:text-gray-300">Realizados</button>
+                 <button id="btn-filter-pendente" class="px-4 py-2 text-sm rounded-lg font-medium transition-all shadow-sm bg-gray-100 dark:bg-gray-700 dark:text-gray-300">Não Realizados</button>
             </div>
 
             <div class="flex-grow overflow-x-auto custom-scrollbar">
@@ -273,6 +284,7 @@
                             <th class="px-6 py-3 rounded-tl-lg">Colaborador</th>
                             <th class="px-6 py-3">Empresa</th>
                             <th class="px-6 py-3">Projeto</th>
+                            <th class="px-6 py-3">Ano</th>
                             <th class="px-6 py-3">Função</th>
                             <th class="px-6 py-3 rounded-tr-lg">Status</th>
                         </tr>
@@ -283,6 +295,52 @@
         </div>
     </div>
     
+    <!-- NOVO MODAL: Detalhes do Colaborador -->
+    <div id="colab-details-modal" class="fixed inset-0 bg-black/60 hidden z-[60] flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-6 w-full max-w-2xl max-h-[90vh] flex flex-col transform transition-all">
+             <div class="flex justify-between items-start mb-6 border-b border-gray-100 dark:border-gray-700 pb-4">
+                <div>
+                    <h3 id="colab-modal-name" class="text-2xl font-bold dark:text-white truncate pr-4">Nome do Colaborador</h3>
+                    <p id="colab-modal-info" class="text-sm text-gray-500 dark:text-gray-400 mt-1 flex items-center flex-wrap gap-2">
+                        <!-- Conteúdo será preenchido via JS -->
+                    </p>
+                </div>
+                <button id="close-colab-modal-btn" class="text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            
+            <div class="overflow-y-auto custom-scrollbar pr-2">
+                <!-- Seção de Datas Principais -->
+                <div class="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-lg mb-6">
+                    <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 uppercase tracking-wider flex items-center gap-2">
+                        <i data-lucide="calendar-clock" class="w-4 h-4"></i> Datas do Treinamento
+                    </h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="p-3 bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700">
+                             <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Disparado em</p>
+                             <p id="colab-disparado" class="font-medium text-gray-800 dark:text-white text-lg">--</p>
+                        </div>
+                        <div class="p-3 bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700">
+                             <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Realizado em</p>
+                             <p id="colab-realizado" class="font-medium text-gray-800 dark:text-white text-lg">--</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seção de Reciclagens -->
+                <div>
+                    <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 uppercase tracking-wider flex items-center gap-2">
+                         <i data-lucide="refresh-cw" class="w-4 h-4"></i> Reciclagens
+                    </h4>
+                    <div id="colab-reciclagens-list" class="space-y-2">
+                        <!-- Lista dinâmica aqui -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal Exclusão -->
     <div id="delete-modal" class="fixed inset-0 bg-black/60 hidden z-50 flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-8 w-full max-w-md text-center">
@@ -298,8 +356,7 @@
         </div>
     </div>
 
-    <!-- Referência ao Arquivo JS -->
+    <!-- Scripts -->
     <script src="js/app.js"></script>
 </body>
 </html>
-
