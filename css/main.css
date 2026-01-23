@@ -40,13 +40,5 @@ body {
 .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 4px; }
 .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #4a5568; }
 
-/* Script para persistência do Tema (Dark/Light) */
-(function () {
-    try {
-        const saved = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if ((saved === 'dark') || (!saved && prefersDark)) {
-            document.documentElement.classList.add('dark');
-        }
-    } catch (_) {}
-})();
+/* Cursor pointer para gráficos */
+canvas { cursor: pointer; }
