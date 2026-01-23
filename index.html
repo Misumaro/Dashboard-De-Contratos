@@ -5,19 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <title>Dashboard de Contratos - Visão Real</title>
 
+    <!-- Script para persistência do Tema (DEVE VIR PRIMEIRO) -->
+    <script>
+        (function () {
+            try {
+                const saved = localStorage.getItem('theme');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if ((saved === 'dark') || (!saved && prefersDark)) {
+                    document.documentElement.classList.add('dark');
+                }
+            } catch (_) {}
+        })();
+    </script>
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = { darkMode: 'class' };
     </script>
 
-    <!-- Fontes e Bibliotecas -->
+    <!-- Fontes -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
     
+    <!-- Ícones Lucide -->
     <script src="https://unpkg.com/lucide@0.474.0"></script>
+    
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    
+    <!-- Nosso JavaScript -->
     <script src="js/app.js" defer></script>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
@@ -79,7 +97,7 @@
                 </div>
 
                 <!-- Card 2 -->
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex justify-between items-center card-hover relative overflow-hidden group cursor-pointer" onclick="window.openTrainingModal('ativos')">
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex justify-between items-center card-hover relative overflow-hidden group cursor-pointer" onclick="Dashboard.openTrainingModal('ativos')">
                     <div class="absolute left-0 top-0 bottom-0 w-1 bg-green-500"></div>
                     <div class="overflow-hidden z-10">
                         <p class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider truncate">Colab. Ativos (A)</p>
@@ -103,7 +121,7 @@
                 </div>
 
                 <!-- Card 4 -->
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex justify-between items-center card-hover relative overflow-hidden group cursor-pointer" onclick="window.openTrainingModal('pendente')">
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex justify-between items-center card-hover relative overflow-hidden group cursor-pointer" onclick="Dashboard.openTrainingModal('pendente')">
                     <div class="absolute left-0 top-0 bottom-0 w-1 bg-yellow-500"></div>
                     <div class="overflow-hidden z-10">
                         <p class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider truncate">Treino Não Realizado</p>
@@ -115,7 +133,7 @@
                 </div>
 
                 <!-- Card 5 -->
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex justify-between items-center card-hover relative overflow-hidden group cursor-pointer" onclick="window.openTrainingModal('realizado')">
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex justify-between items-center card-hover relative overflow-hidden group cursor-pointer" onclick="Dashboard.openTrainingModal('realizado')">
                     <div class="absolute left-0 top-0 bottom-0 w-1 bg-teal-500"></div>
                     <div class="overflow-hidden z-10">
                         <p class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider truncate">Treino Realizado</p>
@@ -183,7 +201,7 @@
                         </div>
                     </div>
 
-                    <!-- NOVO GRÁFICO: Porcentagem por Ano -->
+                    <!-- Gráfico 2: Aderência por Ano -->
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-100 dark:border-gray-700">
                         <h3 class="font-bold text-lg dark:text-white mb-6 text-center flex items-center justify-center gap-2">
                             <i data-lucide="calendar-check-2" class="w-5 h-5 text-gray-400"></i> Aderência por Ano (%)
@@ -193,7 +211,7 @@
                         </div>
                     </div>
                     
-                    <!-- Gráfico 2: Volume por Projeto -->
+                    <!-- Gráfico 3: Volume por Projeto -->
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-100 dark:border-gray-700">
                         <h3 class="font-bold text-lg dark:text-white mb-6 text-center flex items-center justify-center gap-2">
                             <i data-lucide="bar-chart-3" class="w-5 h-5 text-gray-400"></i> Volume por Projeto
@@ -203,7 +221,7 @@
                         </div>
                     </div>
 
-                    <!-- Gráfico 3: Top Funções -->
+                    <!-- Gráfico 4: Top Funções -->
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-100 dark:border-gray-700">
                         <h3 class="font-bold text-lg dark:text-white mb-6 text-center flex items-center justify-center gap-2">
                             <i data-lucide="briefcase" class="w-5 h-5 text-gray-400"></i> Top 5 Funções
@@ -213,7 +231,7 @@
                         </div>
                     </div>
 
-                    <!-- Gráfico 4: Situação Geral -->
+                    <!-- Gráfico 5: Situação Geral -->
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-100 dark:border-gray-700">
                         <h3 class="font-bold text-lg dark:text-white mb-6 text-center flex items-center justify-center gap-2">
                             <i data-lucide="users-2" class="w-5 h-5 text-gray-400"></i> Situação (Ativos/Inativos)
@@ -230,14 +248,14 @@
     <!-- MODAIS -->
     
     <!-- Modal Projeto -->
-    <div id="project-details-modal" class="modal-overlay hidden">
-        <div class="modal-container w-full max-w-[95%] xl:max-w-7xl">
-            <div class="modal-header">
+    <div id="project-details-modal" class="fixed inset-0 bg-black/60 hidden z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-6 w-full max-w-[95%] xl:max-w-7xl max-h-[90vh] flex flex-col transform transition-all">
+            <div class="flex justify-between items-center mb-6 flex-shrink-0 border-b border-gray-100 dark:border-gray-700 pb-4">
                 <div>
-                    <h3 id="project-modal-title" class="modal-title">Detalhes do Projeto</h3>
-                    <p id="project-modal-subtitle" class="modal-subtitle">Listagem de colaboradores</p>
+                    <h3 id="project-modal-title" class="text-2xl font-bold dark:text-white truncate pr-4">Detalhes do Projeto</h3>
+                    <p id="project-modal-subtitle" class="text-sm text-gray-500 dark:text-gray-400 truncate mt-1">Listagem de colaboradores</p>
                 </div>
-                <button id="close-project-modal-btn" class="modal-close-btn">
+                <button id="close-project-modal-btn" class="text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
@@ -246,136 +264,121 @@
             <div class="mb-4">
                 <div class="relative">
                     <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
-                    <input id="projectSearchInput" type="text" placeholder="Buscar colaborador neste projeto..." class="modal-search-input">
+                    <input id="projectSearchInput" type="text" placeholder="Buscar colaborador neste projeto..." class="pl-9 pr-4 py-2 border rounded-lg w-full bg-gray-50 dark:bg-gray-700/50 border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm transition-shadow text-gray-800 dark:text-gray-200">
                 </div>
             </div>
 
-            <div class="modal-content">
-                <table class="modal-table">
-                    <thead>
+            <div class="flex-grow overflow-x-auto custom-scrollbar">
+                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 min-w-[800px]">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700/50 dark:text-gray-400 sticky top-0">
                         <tr>
-                            <th class="rounded-tl-lg">Colaborador</th>
-                            <th>Função</th>
-                            <th>Ano</th>
-                            <th>Situação</th>
-                            <th class="rounded-tr-lg">Treinamento</th>
+                            <th scope="col" class="px-6 py-3 rounded-tl-lg">Colaborador</th>
+                            <th scope="col" class="px-6 py-3">Função</th>
+                            <th scope="col" class="px-6 py-3">Ano</th>
+                            <th scope="col" class="px-6 py-3">Situação</th>
+                            <th scope="col" class="px-6 py-3 rounded-tr-lg">Treinamento</th>
                         </tr>
                     </thead>
-                    <tbody id="project-employees-list"></tbody>
+                    <tbody id="project-employees-list" class="divide-y divide-gray-100 dark:divide-gray-700"></tbody>
                 </table>
             </div>
         </div>
     </div>
     
     <!-- Modal Treinamento -->
-    <div id="training-details-modal" class="modal-overlay hidden">
-        <div class="modal-container w-full max-w-[95%] xl:max-w-7xl">
-            <div class="modal-header">
+    <div id="training-details-modal" class="fixed inset-0 bg-black/60 hidden z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-6 w-full max-w-[95%] xl:max-w-7xl max-h-[90vh] flex flex-col transform transition-all">
+            <div class="flex justify-between items-center mb-6 flex-shrink-0 border-b border-gray-100 dark:border-gray-700 pb-4">
                 <div>
-                    <h3 id="training-modal-title" class="modal-title">Detalhamento de Treinamento (Ativos)</h3>
-                    <p class="modal-subtitle">Lista de colaboradores ativos e seus status</p>
+                    <h3 id="training-modal-title" class="text-2xl font-bold dark:text-white truncate pr-4">Detalhamento de Treinamento (Ativos)</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 truncate mt-1">Lista de colaboradores ativos e seus status</p>
                 </div>
-                <button id="close-training-modal-btn" class="modal-close-btn">
+                <button id="close-training-modal-btn" class="text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
             
-            <div class="modal-filter-buttons">
-                <button id="btn-filter-all" onclick="window.setTrainingFilter('all')" class="filter-btn active">Todos</button>
-                <button id="btn-filter-realizado" onclick="window.setTrainingFilter('realizado')" class="filter-btn">Realizados</button>
-                <button id="btn-filter-atrasado" onclick="window.setTrainingFilter('atrasado')" class="filter-btn">Atrasados</button>
-                <button id="btn-filter-pendente" onclick="window.setTrainingFilter('pendente')" class="filter-btn">Não Realizados</button>
+            <div class="flex gap-2 mb-4 flex-wrap">
+                 <button id="btn-filter-all" onclick="Dashboard.setTrainingFilter('all')" class="px-4 py-2 text-sm rounded-lg font-medium transition-all shadow-sm bg-blue-600 text-white">Todos</button>
+                 <button id="btn-filter-realizado" onclick="Dashboard.setTrainingFilter('realizado')" class="px-4 py-2 text-sm rounded-lg font-medium transition-all shadow-sm bg-gray-100 dark:bg-gray-700 dark:text-gray-300">Realizados</button>
+                 <button id="btn-filter-atrasado" onclick="Dashboard.setTrainingFilter('atrasado')" class="px-4 py-2 text-sm rounded-lg font-medium transition-all shadow-sm bg-gray-100 dark:bg-gray-700 dark:text-gray-300">Atrasados</button>
+                 <button id="btn-filter-pendente" onclick="Dashboard.setTrainingFilter('pendente')" class="px-4 py-2 text-sm rounded-lg font-medium transition-all shadow-sm bg-gray-100 dark:bg-gray-700 dark:text-gray-300">Não Realizados</button>
             </div>
 
-            <div class="modal-content">
-                <table class="modal-table">
-                    <thead>
+            <div class="flex-grow overflow-x-auto custom-scrollbar">
+                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 min-w-[800px]">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700/50 dark:text-gray-400 sticky top-0">
                         <tr>
-                            <th class="rounded-tl-lg">Colaborador</th>
-                            <th>Empresa</th>
-                            <th>Projeto</th>
-                            <th>Ano</th>
-                            <th>Função</th>
-                            <th class="rounded-tr-lg">Status</th>
+                            <th class="px-6 py-3 rounded-tl-lg">Colaborador</th>
+                            <th class="px-6 py-3">Empresa</th>
+                            <th class="px-6 py-3">Projeto</th>
+                            <th class="px-6 py-3">Ano</th>
+                            <th class="px-6 py-3">Função</th>
+                            <th class="px-6 py-3 rounded-tr-lg">Status</th>
                         </tr>
                     </thead>
-                    <tbody id="training-employees-list"></tbody>
+                    <tbody id="training-employees-list" class="divide-y divide-gray-100 dark:divide-gray-700"></tbody>
                 </table>
             </div>
         </div>
     </div>
     
     <!-- Modal Detalhes do Colaborador -->
-    <div id="colab-details-modal" class="modal-overlay hidden">
-        <div class="modal-container w-full max-w-2xl">
-            <div class="modal-header">
+    <div id="colab-details-modal" class="fixed inset-0 bg-black/60 hidden z-[60] flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-6 w-full max-w-2xl max-h-[90vh] flex flex-col transform transition-all">
+             <div class="flex justify-between items-start mb-6 border-b border-gray-100 dark:border-gray-700 pb-4">
                 <div>
-                    <h3 id="colab-modal-name" class="modal-title">Nome do Colaborador</h3>
-                    <p id="colab-modal-info" class="modal-subtitle"></p>
+                    <h3 id="colab-modal-name" class="text-2xl font-bold dark:text-white truncate pr-4">Nome do Colaborador</h3>
+                    <p id="colab-modal-info" class="text-sm text-gray-500 dark:text-gray-400 mt-1 flex items-center flex-wrap gap-2"></p>
                 </div>
-                <button id="close-colab-modal-btn" class="modal-close-btn">
+                <button id="close-colab-modal-btn" class="text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
             
-            <div class="modal-scrollable-content">
+            <div class="overflow-y-auto custom-scrollbar pr-2">
                 <!-- Seção de Datas Principais -->
-                <div class="info-section">
-                    <h4 class="info-section-title">
+                <div class="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-lg mb-6">
+                    <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 uppercase tracking-wider flex items-center gap-2">
                         <i data-lucide="calendar-clock" class="w-4 h-4"></i> Datas do Treinamento
                     </h4>
-                    <div class="info-grid">
-                        <div class="info-item">
-                            <p class="info-label">Disparado em</p>
-                            <p id="colab-disparado" class="info-value">--</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="p-3 bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700">
+                             <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Disparado em</p>
+                             <p id="colab-disparado" class="font-medium text-gray-800 dark:text-white text-lg">--</p>
                         </div>
-                        <div class="info-item">
-                            <p class="info-label">Realizado em</p>
-                            <p id="colab-realizado" class="info-value">--</p>
+                        <div class="p-3 bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700">
+                             <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Realizado em</p>
+                             <p id="colab-realizado" class="font-medium text-gray-800 dark:text-white text-lg">--</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Seção de Reciclagens -->
                 <div>
-                    <h4 class="info-section-title">
-                        <i data-lucide="refresh-cw" class="w-4 h-4"></i> Reciclagens
+                    <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 uppercase tracking-wider flex items-center gap-2">
+                         <i data-lucide="refresh-cw" class="w-4 h-4"></i> Reciclagens
                     </h4>
-                    <div id="colab-reciclagens-list" class="space-y-2">
-                        <!-- Lista dinâmica aqui -->
-                    </div>
+                    <div id="colab-reciclagens-list" class="space-y-2"></div>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Modal Exclusão -->
-    <div id="delete-modal" class="modal-overlay hidden">
-        <div class="modal-container max-w-md text-center">
-            <div class="modal-icon bg-red-100 dark:bg-red-900/30">
+    <div id="delete-modal" class="fixed inset-0 bg-black/60 hidden z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-8 w-full max-w-md text-center">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/30 mb-4">
                 <i data-lucide="alert-triangle" class="h-6 w-6 text-red-600 dark:text-red-400"></i>
             </div>
-            <h3 class="modal-title">Confirmar Exclusão</h3>
-            <p class="modal-text">Tem certeza que deseja excluir esta empresa e seus dados? Esta ação é irreversível.</p>
-            <div class="modal-actions">
-                <button id="cancel-delete-btn" type="button" class="modal-btn-secondary">Cancelar</button>
-                <button id="confirm-delete-btn" type="button" class="modal-btn-danger">Sim, Excluir</button>
+            <h3 class="text-xl font-bold mb-2 dark:text-white">Confirmar Exclusão</h3>
+            <p class="text-gray-500 dark:text-gray-400 mb-6">Tem certeza que deseja excluir esta empresa e seus dados? Esta ação é irreversível.</p>
+            <div class="flex justify-center gap-3">
+                <button id="cancel-delete-btn" type="button" class="px-5 py-2.5 text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 rounded-lg dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600 transition-colors font-medium">Cancelar</button>
+                <button id="confirm-delete-btn" type="button" class="px-5 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium shadow-md">Sim, Excluir</button>
             </div>
         </div>
     </div>
-
-    <!-- Script para persistência do Tema (Dark/Light) -->
-    <script>
-        (function () {
-            try {
-                const saved = localStorage.getItem('theme');
-                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                if ((saved === 'dark') || (!saved && prefersDark)) {
-                    document.documentElement.classList.add('dark');
-                }
-            } catch (_) {}
-        })();
-    </script>
 
 </body>
 </html>
