@@ -11,14 +11,30 @@
         tailwind.config = { darkMode: 'class' };
     </script>
 
+    <!-- Script para persistência do Tema (Dark/Light) -->
+    <script>
+        (function () {
+            try {
+                const saved = localStorage.getItem('theme');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if ((saved === 'dark') || (!saved && prefersDark)) {
+                    document.documentElement.classList.add('dark');
+                }
+            } catch (_) {}
+        })();
+    </script>
+
     <!-- Fontes e Bibliotecas -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@0.474.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 
-    <!-- CSS Personalizado -->
+    <!-- CSS local -->
     <link rel="stylesheet" href="css/main.css">
+
+    <!-- JS local -->
+    <script type="module" src="js/app.js"></script>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
     
@@ -183,8 +199,8 @@
                         </div>
                     </div>
 
-                    <!-- NOVO GRÁFICO: Porcentagem por Ano -->
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-100 dark:border-gray-700">
+                      <!-- NOVO GRÁFICO: Porcentagem por Ano -->
+                      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-100 dark:border-gray-700">
                         <h3 class="font-bold text-lg dark:text-white mb-6 text-center flex items-center justify-center gap-2">
                             <i data-lucide="calendar-check-2" class="w-5 h-5 text-gray-400"></i> Aderência por Ano (%)
                         </h3>
@@ -241,6 +257,15 @@
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
+            
+            <!-- BUSCA DENTRO DO MODAL -->
+            <div class="mb-4">
+                <div class="relative">
+                    <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
+                    <input id="projectSearchInput" type="text" placeholder="Buscar colaborador neste projeto..." class="pl-9 pr-4 py-2 border rounded-lg w-full bg-gray-50 dark:bg-gray-700/50 border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm transition-shadow text-gray-800 dark:text-gray-200">
+                </div>
+            </div>
+
             <div class="flex-grow overflow-x-auto custom-scrollbar">
                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 min-w-[800px]">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700/50 dark:text-gray-400 sticky top-0">
@@ -274,6 +299,7 @@
             <div class="flex gap-2 mb-4 flex-wrap">
                  <button id="btn-filter-all" class="px-4 py-2 text-sm rounded-lg font-medium transition-all shadow-sm bg-blue-600 text-white">Todos</button>
                  <button id="btn-filter-realizado" class="px-4 py-2 text-sm rounded-lg font-medium transition-all shadow-sm bg-gray-100 dark:bg-gray-700 dark:text-gray-300">Realizados</button>
+                 <button id="btn-filter-atrasado" class="px-4 py-2 text-sm rounded-lg font-medium transition-all shadow-sm bg-gray-100 dark:bg-gray-700 dark:text-gray-300">Atrasados</button>
                  <button id="btn-filter-pendente" class="px-4 py-2 text-sm rounded-lg font-medium transition-all shadow-sm bg-gray-100 dark:bg-gray-700 dark:text-gray-300">Não Realizados</button>
             </div>
 
@@ -355,8 +381,5 @@
             </div>
         </div>
     </div>
-
-    <!-- Scripts -->
-    <script src="js/app.js"></script>
 </body>
 </html>
